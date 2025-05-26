@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Game - Thanos's Quest</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 id="room-title"></h1>
+
+    <div id="game-container">
+        <div id="start-screen">
+            <button id="start-button">Lancer la Quête</button>
+        </div>
+
+        <div id="info-banner">
+            <div id="timer">Temps restant : 05:00</div>
+            <div id="riddles-left">Pierres restantes : 3</div>
+        </div>
+        <div id="game-area"></div>
+        <div id="dialogue-window" class="hidden">
+            <div class="character-portrait">
+                <img id="dialogue-character-image" src="" alt="Character">
+            </div>
+            <p id="dialogue-text"></p>
+        </div>
+        <div id="notification-area"></div>
+    </div>
+
+    <audio id="background-music" loop></audio>
+    <script type="module" src="../src/main.js"></script>
+</body>
+</html>

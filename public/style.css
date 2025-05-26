@@ -1,0 +1,166 @@
+/* public/style.css */
+
+/* Styles généraux */
+body {
+    background-color: #000;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+#room-title {
+    color: #e0e0e0;
+    font-size: 2.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 8px #8e44ad, 0 0 12px #8e44ad;
+}
+
+#game-container {
+    width: 1000px;
+    height: 600px;
+    border: 3px solid #4a148c;
+    position: relative;
+    box-shadow: 0 0 20px rgba(74, 20, 140, 0.8);
+}
+
+#game-area {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+#info-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2em;
+    font-weight: bold;
+    z-index: 10;
+}
+
+#dialogue-window {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    min-height: 120px;
+    background-color: rgba(10, 10, 10, 0.9);
+    border: 2px solid #4a148c;
+    padding: 15px 20px 15px 110px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    z-index: 20;
+}
+
+#dialogue-window .character-portrait {
+    position: absolute;
+    left: -20px;
+    bottom: -2px;
+    width: 120px;
+    height: 120px;
+}
+
+#dialogue-window #dialogue-character-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+#dialogue-text {
+    margin: 0;
+    font-size: 1.2em;
+    line-height: 1.5;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.interactive-object {
+    position: absolute;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.interactive-object:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px yellow);
+}
+
+.memory-object {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+/* -- MODIFICATION DE LA ZONE DE SACRIFICE (Option 1 : Subtile) -- */
+#sacrifice-zone {
+    position: absolute;
+    bottom: 160px;
+    left: 35%;
+    width: 30%;
+    height: 100px;
+    /* On rend la zone invisible par défaut */
+    background-color: transparent;
+    border: 2px dashed transparent;
+    border-radius: 10px;
+    transition: background-color 0.3s, border-color 0.3s; /* Animation douce */
+}
+
+#sacrifice-zone.drag-over {
+    /* La zone devient visible quand on glisse un objet dessus */
+    background-color: rgba(139, 0, 0, 0.3);
+    border-color: red;
+}
+
+/* public/style.css */
+body{background-color:#000;color:#fff;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;margin:0;overflow:hidden}#room-title{color:#e0e0e0;font-size:2.2em;text-transform:uppercase;margin-bottom:20px;letter-spacing:3px;text-shadow:0 0 8px #8e44ad,0 0 12px #8e44ad}#game-container{width:1000px;height:600px;border:3px solid #4a148c;position:relative;box-shadow:0 0 20px rgba(74,20,140,.8)}#game-area{width:100%;height:100%;background-size:cover;background-position:center;position:relative}#info-banner{position:absolute;top:0;left:0;width:100%;padding:10px 20px;box-sizing:border-box;background-color:rgba(0,0,0,.7);display:flex;justify-content:space-between;font-size:1.2em;font-weight:700;z-index:10}#dialogue-window{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);width:90%;min-height:120px;background-color:rgba(10,10,10,.9);border:2px solid #4a148c;padding:15px 20px 15px 110px;border-radius:8px;box-sizing:border-box;z-index:20}#dialogue-window .character-portrait{position:absolute;left:-20px;bottom:-2px;width:120px;height:120px}#dialogue-window #dialogue-character-image{width:100%;height:auto;object-fit:contain}#dialogue-text{margin:0;font-size:1.2em;line-height:1.5}.hidden{display:none!important}.interactive-object{position:absolute;cursor:pointer;transition:transform .2s ease,filter .2s ease}.interactive-object:hover{transform:scale(1.1);filter:drop-shadow(0 0 10px yellow)}.memory-object{position:absolute;width:80px;height:80px;object-fit:contain}#sacrifice-zone{position:absolute;bottom:160px;left:35%;width:30%;height:100px;background-color:transparent;border:2px dashed transparent;border-radius:10px;transition:background-color .3s,border-color .3s}#sacrifice-zone.drag-over{background-color:rgba(139,0,0,.3);border-color:red}
+
+/* -- NOUVEAUX STYLES POUR L'ÉCRAN DE DÉMARRAGE -- */
+#start-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#start-button {
+    padding: 15px 30px;
+    font-size: 1.5em;
+    color: white;
+    background-color: #8e44ad;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+#start-button:hover {
+    background-color: #9b59b6;
+    transform: scale(1.05);
+}
