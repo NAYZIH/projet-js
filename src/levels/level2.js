@@ -201,18 +201,10 @@ function handleVictory() {
     document.getElementById('background-music').pause();
     ui.clearGameArea(); // [cite: 63]
 
-    // Simple "victory" display for now
-    const strangeVictorySprite = document.createElement('img');
-    strangeVictorySprite.src = strange.image; // [cite: 2]
-    strangeVictorySprite.style.position = 'absolute';
-    strangeVictorySprite.style.left = '50%';
-    strangeVictorySprite.style.top = '50%';
-    strangeVictorySprite.style.transform = 'translate(-50%, -50%) scale(1.2)';
-    strangeVictorySprite.style.filter = 'drop-shadow(0 0 15px #0f0)'; // Green glow for success
-    gameAreaRef.appendChild(strangeVictorySprite);
+    // Load Thanos background image for victory
+    ui.loadSceneBackground('./assets/images/thanos-bg.jpg');
 
-    ui.showDialogue(strange, "Pour Stark... C'était le seul moyen. Prenez-la. La Pierre du Temps est à vous."); // [cite: 54]
-    // playSound('./assets/sounds/time_stone_acquired.mp3'); // Suggestion: add a specific sound
+    ui.showDialogue(thanos, "La Pierre du Temps est mienne. Un pas de plus vers l'équilibre.");
 
     setTimeout(() => {
         levelCompleted(); // Advance to next level/game state [cite: 39, 64]
