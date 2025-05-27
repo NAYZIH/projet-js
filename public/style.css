@@ -31,6 +31,22 @@ body {
     box-shadow: 0 0 20px rgba(74, 20, 140, 0.8);
 }
 
+/* == THÈME NIVEAU 2 : CONTOURS VERTS ET TITRE VERT == */
+.level2-theme #game-container {
+    border-color: green !important;
+    box-shadow: 0 0 20px rgba(0, 128, 0, 0.8) !important;
+}
+.level2-theme #dialogue-window {
+    border-color: green !important;
+}
+.level2-theme #room-title {
+    /* titre avec ombre verte au lieu de violet émeraude */
+    text-shadow: 0 0 8px green, 0 0 12px green !important;
+    /* si besoin, on peut aussi changer la couleur du texte */
+    /* color: #b2ff59 !important; */
+}
+/* Fin thème niveau 2 */
+
 #game-area {
     width: 100%;
     height: 100%;
@@ -131,9 +147,6 @@ body {
     border-color: red;
 }
 
-/* public/style.css */
-body{background-color:#000;color:#fff;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;margin:0;overflow:hidden}#room-title{color:#e0e0e0;font-size:2.2em;text-transform:uppercase;margin-bottom:20px;letter-spacing:3px;text-shadow:0 0 8px #8e44ad,0 0 12px #8e44ad}#game-container{width:1000px;height:600px;border:3px solid #4a148c;position:relative;box-shadow:0 0 20px rgba(74,20,140,.8)}#game-area{width:100%;height:100%;background-size:cover;background-position:center;position:relative}#info-banner{position:absolute;top:0;left:0;width:100%;padding:10px 20px;box-sizing:border-box;background-color:rgba(0,0,0,.7);display:flex;justify-content:space-between;font-size:1.2em;font-weight:700;z-index:10}#dialogue-window{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);width:90%;min-height:120px;background-color:rgba(10,10,10,.9);border:2px solid #4a148c;padding:15px 20px 15px 110px;border-radius:8px;box-sizing:border-box;z-index:20}#dialogue-window .character-portrait{position:absolute;left:-20px;bottom:-2px;width:120px;height:120px}#dialogue-window #dialogue-character-image{width:100%;height:auto;object-fit:contain}#dialogue-text{margin:0;font-size:1.2em;line-height:1.5}.hidden{display:none!important}.interactive-object{position:absolute;cursor:pointer;transition:transform .2s ease,filter .2s ease}.interactive-object:hover{transform:scale(1.1);filter:drop-shadow(0 0 10px yellow)}.memory-object{position:absolute;width:80px;height:80px;object-fit:contain}#sacrifice-zone{position:absolute;bottom:160px;left:35%;width:30%;height:100px;background-color:transparent;border:2px dashed transparent;border-radius:10px;transition:background-color .3s,border-color .3s}#sacrifice-zone.drag-over{background-color:rgba(139,0,0,.3);border-color:red}
-
 /* -- NOUVEAUX STYLES POUR L'ÉCRAN DE DÉMARRAGE -- */
 #start-screen {
     position: absolute;
@@ -166,14 +179,14 @@ body{background-color:#000;color:#fff;font-family:'Segoe UI',Tahoma,Geneva,Verda
 }
 
 .ephemeral-number-display {
-    position: absolute; /* Crucial for positioning */
-    font-size: 48px;    /* Large and readable */
+    position: absolute; /* Crucial pour positionnement */
+    font-size: 48px;    /* Grandes et lisibles */
     font-weight: bold;
-    color: #FFD700;    /* Gold color, like the Time Stone's glow */
-    z-index: 150;       /* Ensures it's above game elements but potentially below main UI like dialogue */
-    pointer-events: none; /* Allows clicks to pass through to elements underneath */
+    color: #FFD700;    /* Or, comme la lueur de la Pierre du Temps */
+    z-index: 150;       /* Au-dessus des éléments du jeu */
+    pointer-events: none; /* Laisse passer les clics */
     text-shadow: 
-        0 0 5px rgba(0,0,0,0.8),   /* Soft black outline for depth */
-        0 0 10px #FFEA00,          /* Inner yellow glow */
-        0 0 20px #FFC300;          /* Outer orange-yellow glow */
+        0 0 5px rgba(0,0,0,0.8),   /* Contour sombre pour la profondeur */
+        0 0 10px #FFEA00,          /* Lueur interne jaune */
+        0 0 20px #FFC300;          /* Lueur externe orange */
 }
