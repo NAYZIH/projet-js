@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Crédits - La Quête de Thanos</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #credits-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #credits-content {
+            text-align: center;
+            animation: scroll 20s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(-100%); }
+        }
+    </style>
+</head>
+<body>
+    <div id="credits-screen">
+        <div id="credits-content">
+            <h1>Crédits - La Quête de Thanos</h1>
+            <p>Nous tenons à remercier toutes les personnes et ressources qui ont contribué à la création de cet Escape Game.</p>
+            <h2>Développement et Conception du Jeu</h2>
+            <p>- Conception Principale & Développement : Loprin Maxime, Sriram Mallipoudy, Sami El Abdallaoui</p>
+            <p>- Développement Niveau 1 : Loprin Maxime</p>
+            <p>- Développement Niveau 2 : Sriram Mallipoudy</p>
+            <p>- Développement Niveau 3 : Loprin Maxime</p>
+            <h2>Ressources Visuelles</h2>
+            <p>Toutes les ressources visuelles ont été générées par une Intelligence Artificielle par Loprin Maxime.</p>
+            <p>- Sprites des Personnages : Thanos, Wanda, Vision, Gamora, Doctor Strange</p>
+            <p>- Images de Fond d'Écran : nebuleuse.jpg, vormir_2d.jpg, titan_2d.jpg, thanos-bg.jpg, gamora_dead.jpeg, wakanda_2d.jpg, wakanda_2d_2.jpg, final_1.jpg, final_2.jpg, final_3.jpg</p>
+            <p>- Objets et Icônes : Pierre de l'Esprit (esprit.jpg), Objets des énigmes (Poupée, Dague, Œil d'Agamotto, Portails)</p>
+            <h2>Musique et Effets Sonores</h2>
+            <p>- Musiques de Fond : Niveau 1 (Vormir) : vormir.mp3, Niveau 2 (Titan) : titan.mp3, Niveau 3 (Wakanda) : final.mp3</p>
+            <p>- Tous les droits des musiques et de l'univers Marvel appartiennent à Marvel Comics et Marvel Studios (The Walt Disney Company).</p>
+            <p>- Effets Sonores (SFX) : Tous les effets sonores utilisés dans le jeu viennent de : https://mixkit.co/free-sound-effects/game/</p>
+            <h2>Outils et Technologies</h2>
+            <p>- JavaScript (ES6+)</p>
+            <p>- HTML5</p>
+            <p>- CSS3</p>
+            <p>- Intelligence Artificielle pour la génération des ressources visuelles</p>
+            <h2>Inspiration</h2>
+            <p>- Ce jeu est un projet de fan non commercial, inspiré par l'univers cinématographique et les personnages de Marvel. Tous les droits des personnages et de l'univers Marvel appartiennent à Marvel Comics et Marvel Studios (The Walt Disney Company).</p>
+        </div>
+    </div>
+    <script>
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 20000); // 20 seconds
+    </script>
+</body>
+</html>

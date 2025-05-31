@@ -58,27 +58,16 @@ export function levelCompleted() {
 }
 
 /**
- * Charge un niveau spécifique, incluant le thème visuel et la logique.
- * @param {number} levelNumber - Le numéro du niveau à charger.
+ * Charge le niveau spécifié.
+ * @param {number} level - Le numéro du niveau à charger.
  */
-function loadLevel(levelNumber) {
-    const music = document.getElementById('background-music');
-    if (music) {
-        music.pause();
-        music.currentTime = 0;
-    }
-
-    const storyButton = document.getElementById('story-reminder-button');
-    if (storyButton) {
-        storyButton.style.display = 'none';
-    }
-
-    startTimer(gameState.totalTime); // Redémarre le timer pour le nouveau niveau
-
+function loadLevel(level) {
     const bodyElement = document.body;
-    bodyElement.classList.remove('theme-salle1-ame', 'level2-theme', 'theme-salle3-esprit');
+    const music = document.getElementById('background-music');
 
-    switch (levelNumber) {
+    startTimer(gameState.totalTime);
+
+    switch (level) {
         case 1:
             bodyElement.classList.add('theme-salle1-ame');
             music.src = './assets/sounds/vormir.mp3';
@@ -162,6 +151,11 @@ function gameWon() {
                     systemMessage,
                     finalMessageText
                 );
+
+                // Redirection vers l'écran de crédits après 5 secondes
+                setTimeout(() => {
+                    window.location.href = 'credits.html';
+                }, 5000);
             }, 5000);
         }, 6000);
     }, 6000);
