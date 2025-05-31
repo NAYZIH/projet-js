@@ -1,8 +1,27 @@
 /* public/style.css */
 
-/* Styles généraux */
+/* == ANIMATIONS == */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translate(-50%, 20%) translateX(0); }
+    25% { transform: translate(-50%, 20%) translateX(-5px); }
+    50% { transform: translate(-50%, 20%) translateX(5px); }
+    75% { transform: translate(-50%, 20%) translateX(-5px); }
+}
+
+
+/* == STYLES GÉNÉRAUX == */
 body {
-    background-color: #000;
+    background-image: url('./assets/images/nebuleuse.jpg'); /* [cite: 1] */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
@@ -12,40 +31,41 @@ body {
     height: 100vh;
     margin: 0;
     overflow: hidden;
+    padding-top: 20px; /* Ajout d'un peu d'espace en haut si le titre est fixe */
 }
 
+/* NOUVEAU : Style pour le conteneur du titre et du bouton */
+#title-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centre le groupe titre + bouton */
+    width: 100%;
+    max-width: 1280px; /* Pour correspondre à la largeur max du game-container */
+    margin-bottom: 15px; /* Espace avant le game-container */
+    position: relative; /* Pour un positionnement relatif si besoin */
+}
+
+/* == LAYOUT PRINCIPAL == */
 #room-title {
     color: #e0e0e0;
     font-size: 2.2em;
     text-transform: uppercase;
-    margin-bottom: 20px;
     letter-spacing: 3px;
-    text-shadow: 0 0 8px #8e44ad, 0 0 12px #8e44ad;
+    text-shadow: 0 0 8px #8e44ad, 0 0 12px #8e44ad; /* [cite: 1] */
+    margin: 0; /* Retiré la marge par défaut du h1 */
+    margin-right: 20px; /* Espace entre le titre et le bouton */
+    /* flex-grow: 1; /* Pour que le titre prenne de la place si besoin */
+    /* text-align: right; /* Pour aligner le texte du titre à droite s'il y a beaucoup de place */
 }
 
 #game-container {
-    width: 1000px;
-    height: 600px;
-    border: 3px solid #4a148c;
+    width: 1280px;
+    height: 720px;
     position: relative;
-    box-shadow: 0 0 20px rgba(74, 20, 140, 0.8);
+    border: 3px solid #4a148c; /* [cite: 1] */
+    box-shadow: 0 0 20px rgba(74, 20, 140, 0.8); /* [cite: 1] */
+    overflow: hidden;
 }
-
-/* == THÈME NIVEAU 2 : CONTOURS VERTS ET TITRE VERT == */
-.level2-theme #game-container {
-    border-color: green !important;
-    box-shadow: 0 0 20px rgba(0, 128, 0, 0.8) !important;
-}
-.level2-theme #dialogue-window {
-    border-color: green !important;
-}
-.level2-theme #room-title {
-    /* titre avec ombre verte au lieu de violet émeraude */
-    text-shadow: 0 0 8px green, 0 0 12px green !important;
-    /* si besoin, on peut aussi changer la couleur du texte */
-    /* color: #b2ff59 !important; */
-}
-/* Fin thème niveau 2 */
 
 #game-area {
     width: 100%;
@@ -55,99 +75,7 @@ body {
     position: relative;
 }
 
-#info-banner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px 20px;
-    box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.2em;
-    font-weight: bold;
-    z-index: 10;
-}
-
-#dialogue-window {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    min-height: 120px;
-    background-color: rgba(10, 10, 10, 0.9);
-    border: 2px solid #4a148c;
-    padding: 15px 20px 15px 110px;
-    border-radius: 8px;
-    box-sizing: border-box;
-    z-index: 20;
-}
-
-#dialogue-window .character-portrait {
-    position: absolute;
-    left: -20px;
-    bottom: -2px;
-    width: 120px;
-    height: 120px;
-}
-
-#dialogue-window #dialogue-character-image {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-}
-
-#dialogue-text {
-    margin: 0;
-    font-size: 1.2em;
-    line-height: 1.5;
-}
-
-.hidden {
-    display: none !important;
-}
-
-.interactive-object {
-    position: absolute;
-    cursor: pointer;
-    transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.interactive-object:hover {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 10px yellow);
-}
-
-.memory-object {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-}
-
-/* -- MODIFICATION DE LA ZONE DE SACRIFICE (Option 1 : Subtile) -- */
-#sacrifice-zone {
-    position: absolute;
-    bottom: 160px;
-    left: 35%;
-    width: 30%;
-    height: 100px;
-    /* On rend la zone invisible par défaut */
-    background-color: transparent;
-    border: 2px dashed transparent;
-    border-radius: 10px;
-    transition: background-color 0.3s, border-color 0.3s; /* Animation douce */
-}
-
-#sacrifice-zone.drag-over {
-    /* La zone devient visible quand on glisse un objet dessus */
-    background-color: rgba(139, 0, 0, 0.3);
-    border-color: red;
-}
-
-/* -- NOUVEAUX STYLES POUR L'ÉCRAN DE DÉMARRAGE -- */
+/* == ÉCRAN DE DÉMARRAGE == */
 #start-screen {
     position: absolute;
     width: 100%;
@@ -164,7 +92,7 @@ body {
     padding: 15px 30px;
     font-size: 1.5em;
     color: white;
-    background-color: #8e44ad;
+    background-color: #8e44ad; /* [cite: 1] */
     border: 2px solid #fff;
     border-radius: 10px;
     cursor: pointer;
@@ -174,19 +102,258 @@ body {
 }
 
 #start-button:hover {
-    background-color: #9b59b6;
+    background-color: #9b59b6; /* [cite: 1] */
     transform: scale(1.05);
 }
 
-.ephemeral-number-display {
-    position: absolute; /* Crucial pour positionnement */
-    font-size: 48px;    /* Grandes et lisibles */
+/* == COMPOSANTS UI == */
+#info-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2em;
     font-weight: bold;
-    color: #FFD700;    /* Or, comme la lueur de la Pierre du Temps */
-    z-index: 150;       /* Au-dessus des éléments du jeu */
-    pointer-events: none; /* Laisse passer les clics */
-    text-shadow: 
-        0 0 5px rgba(0,0,0,0.8),   /* Contour sombre pour la profondeur */
-        0 0 10px #FFEA00,          /* Lueur interne jaune */
-        0 0 20px #FFC300;          /* Lueur externe orange */
+    z-index: 10;
+}
+
+#player-name-display {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0 10px;
+}
+
+#dialogue-window {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    min-height: 100px;
+    background-color: rgba(10, 10, 10, 0.9);
+    border: 2px solid #4a148c; /* [cite: 1] */
+    padding: 15px 20px 15px 115px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    z-index: 20;
+}
+
+#dialogue-window.no-portrait {
+    padding-left: 20px;
+}
+#dialogue-window.no-portrait .character-portrait {
+    display: none;
+}
+
+#dialogue-window .character-portrait {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+#dialogue-window #dialogue-character-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#dialogue-text {
+    margin: 0;
+    font-size: 1.2em;
+    line-height: 1.5;
+    text-align: center;
+}
+
+
+#story-reminder-button {
+    padding: 10px 15px; /* Padding légèrement réduit pour qu'il soit moins large */
+    font-size: 0.8em;   /* Taille de police légèrement réduite */
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    /* margin-bottom: 20px; Retiré, car il est maintenant dans #title-banner */
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #333;
+    background-color: #f4f4f4;
+    border: 2px solid #ddd;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+    white-space: nowrap; /* Empêche le texte du bouton d'aller à la ligne */
+}
+
+/* == ÉLÉMENTS DE JEU == */
+.interactive-object {
+    position: absolute;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.interactive-object:hover {
+    transform: scale(1.1); /* [cite: 1] */
+    filter: drop-shadow(0 0 10px yellow);
+}
+
+.memory-object {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5)); /* [cite: 1] */
+}
+
+#souvenir_poupee {
+    top: 250px;
+    left: 150px;
+}
+
+#souvenir_dague {
+    top: 180px;
+    right: 120px;
+}
+
+#gamora-sprite {
+    position: absolute;
+    bottom: 140px;
+    right: 120px;
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.7)); /* [cite: 1] */
+}
+
+.ephemeral-number-display {
+    position: absolute;
+    font-size: 48px;
+    font-weight: bold;
+    color: #FFD700;
+    z-index: 150;
+    pointer-events: none;
+    text-shadow:
+        0 0 5px rgba(0,0,0,0.8),
+        0 0 10px #FFEA00,
+        0 0 20px #FFC300;
+}
+
+
+/* == ZONES SPÉCIFIQUES == */
+#sacrifice-zone {
+    position: absolute;
+    top: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 60px;
+    background-color: transparent;
+    border: 2px dashed transparent;
+    border-radius: 50%;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+#sacrifice-zone.drag-over {
+    background-color: rgba(139, 0, 0, 0.3);
+    border-color: red;
+}
+
+/* == THÈMES PAR NIVEAU == */
+
+/* Thème Salle 1 - Âme (Vormir) - ORANGE */
+.theme-salle1-ame #title-banner #room-title { text-shadow: 0 0 8px #FF8F00, 0 0 12px #FF8F00; }
+.theme-salle1-ame #title-banner #story-reminder-button {
+    color: #ffffff; background-color: #FF8F00; border: 2px solid #E65100;
+    box-shadow: 0 0 8px rgba(255, 143, 0, 0.8);
+}
+.theme-salle1-ame #title-banner #story-reminder-button:hover {
+    background-color: #FFA726; box-shadow: 0 0 12px rgba(255, 143, 0, 1);
+}
+.theme-salle1-ame #game-container { border: 3px solid #FF6F00; box-shadow: 0 0 20px rgba(255, 111, 0, 0.7); }
+.theme-salle1-ame #player-name-display { color: #FFB74D; }
+.theme-salle1-ame #dialogue-window { border: 2px solid #FF8F00; }
+.theme-salle1-ame .interactive-object:hover { filter: drop-shadow(0 0 12px #FFD180); }
+.theme-salle1-ame #sacrifice-zone.drag-over { background-color: rgba(255, 143, 0, 0.2); border-color: #FF8F00; }
+
+/* Thème Niveau 2 - Temps (Titan) - VERT ÉMERAUDE */
+.level2-theme #title-banner #room-title { text-shadow: 0 0 8px #00C853, 0 0 12px #00C853 !important; }
+.level2-theme #title-banner #story-reminder-button {
+    color: #ffffff; background-color: #00BFA5; border: 2px solid #00897B;
+    box-shadow: 0 0 8px rgba(0, 191, 165, 0.8);
+}
+.level2-theme #title-banner #story-reminder-button:hover {
+    background-color: #1DE9B6; box-shadow: 0 0 12px rgba(0, 191, 165, 1); transform: scale(1.03);
+}
+.level2-theme #game-container { border-color: #00A95C !important; box-shadow: 0 0 20px rgba(0, 169, 92, 0.8) !important; }
+.level2-theme #dialogue-window { border-color: #00A95C !important; }
+.level2-theme #player-name-display { color: #69F0AE; }
+.level2-theme .interactive-object:hover { filter: drop-shadow(0 0 12px #A7FFEB); }
+
+
+/* Thème Salle 3 - Esprit (Wakanda) - JAUNE */
+.theme-salle3-esprit #title-banner #room-title { text-shadow: 0 0 8px #FFEA00, 0 0 12px #FFEA00 !important; }
+.theme-salle3-esprit #title-banner #story-reminder-button {
+    color: #212121; background-color: #FFEB3B; border: 2px solid #FBC02D;
+    box-shadow: 0 0 8px rgba(255, 235, 59, 0.8);
+}
+.theme-salle3-esprit #title-banner #story-reminder-button:hover {
+    background-color: #FFF176; box-shadow: 0 0 12px rgba(255, 235, 59, 1); transform: scale(1.03);
+}
+.theme-salle3-esprit #game-container { border-color: #FFD600 !important; box-shadow: 0 0 20px rgba(255, 214, 0, 0.8) !important; }
+.theme-salle3-esprit #dialogue-window { border-color: #FFD600 !important; }
+.theme-salle3-esprit #player-name-display { color: #FFFF8D; }
+.theme-salle3-esprit .interactive-object:hover { filter: drop-shadow(0 0 12px #FFFDE7); }
+
+/* Styles spécifiques au Niveau 3 (Wakanda) */
+.theme-salle3-esprit .character-sprite {
+    object-fit: contain;
+    filter: drop-shadow(3px 3px 8px rgba(0,0,0,0.6));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.theme-salle3-esprit .anchor-point {
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s, opacity 0.5s;
+}
+
+.theme-salle3-esprit #puzzle-area {
+}
+
+.theme-salle3-esprit .puzzle-slot {
+    background-color: rgba(255,255,255,0.05);
+    border: 1px dashed #888;
+    transition: background-color 0.2s, border-color 0.2s;
+    box-sizing: border-box;
+}
+.theme-salle3-esprit .puzzle-slot:hover {
+    background-color: rgba(255,255,255,0.10);
+    border-color: #ccc;
+}
+
+.theme-salle3-esprit .puzzle-piece {
+    user-select: none;
+    transition: opacity 0.2s, border 0.2s;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+}
+.theme-salle3-esprit .puzzle-piece:hover {
+    filter: brightness(1.2);
+}
+
+.theme-salle3-esprit #mini-timer-display {
+    text-shadow: 0 0 5px black, 0 0 10px yellow;
+}
+
+
+/* == CLASSE UTILITAIRE == */
+.hidden {
+    display: none !important;
 }

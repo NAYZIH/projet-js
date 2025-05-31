@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escape Game - Thanos's Quest</title>
+    <title>Escape Game - La quête de Thanos</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 id="room-title"></h1>
+    <div id="title-banner">
+        <h1 id="room-title"></h1>
+        <button id="story-reminder-button">Rappel de l'Histoire</button>
+    </div>
 
     <div id="game-container">
         <div id="start-screen">
@@ -16,15 +19,20 @@
 
         <div id="info-banner">
             <div id="timer">Temps restant : 05:00</div>
+            <div id="player-name-display">Joueur: -</div>
             <div id="riddles-left">Pierres restantes : 3</div>
         </div>
-        <div id="game-area"></div>
+
+        <div id="game-area">
+            </div>
+
         <div id="dialogue-window" class="hidden">
             <div class="character-portrait">
                 <img id="dialogue-character-image" src="" alt="Character">
             </div>
             <p id="dialogue-text"></p>
         </div>
+
         <div id="notification-area"></div>
     </div>
 

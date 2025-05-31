@@ -1,82 +1,191 @@
 // src/game.js
 
+// Imports
 import * as ui from './ui.js';
-import { startTimer, stopTimer } from './timer.js';
+import { startTimer, stopTimer, getPlayTimeInSeconds } from './timer.js';
+import { saveScore } from './storage.js';
 import { startVormir } from './levels/level1.js';
-// On importe les autres niveaux ici quand ils seront créés
 import { startTitan } from './levels/level2.js';
-// import { startWakanda } from './levels/final.js';
+import { startWakanda } from './levels/level3.js';
 
-let state = {
+// État du jeu
+let gameState = {
+    currentPlayerName: "Thanos Jr.",
     currentLevel: 0,
     stonesLeft: 3,
-    totalTime: 300 // 5 minutes [cite: 25]
+    totalTime: 300,
+    cumulativeTime: 0,
+    levelTimes: [] // NOUVEAU : Pour stocker le temps de chaque salle en secondes
 };
 
-function startGame() {
-    state.currentLevel = 1;
-    state.stonesLeft = 3;
-    ui.updateRiddlesLeft(state.stonesLeft);
-    startTimer(state.totalTime);
-    loadLevel(state.currentLevel);
+/**
+ * Lance le jeu, initialise l'état et charge le premier niveau.
+ * @param {string} playerName - Le nom du joueur.
+ */
+export function startGame(playerName) {
+    gameState.currentPlayerName = playerName;
+    ui.displayPlayerName(gameState.currentPlayerName);
+
+    gameState.stonesLeft = 3;
+    ui.updateRiddlesLeft(gameState.stonesLeft);
+
+    gameState.currentLevel = 1;
+    gameState.cumulativeTime = 0;
+    gameState.levelTimes = []; // Réinitialisation des temps de niveau
+    loadLevel(gameState.currentLevel);
 }
 
+/**
+ * Gère la complétion d'un niveau et vérifie la condition de victoire.
+ */
+export function levelCompleted() {
+    stopTimer(); // Arrête le timer du niveau actuel
+    const timeForThisLevel = getPlayTimeInSeconds(); // Récupère le temps pour ce niveau
+    
+    gameState.levelTimes.push(timeForThisLevel); // Stocke ce temps
+    gameState.cumulativeTime += timeForThisLevel; // Ajoute au temps cumulé
+
+    gameState.stonesLeft--;
+    ui.updateRiddlesLeft(gameState.stonesLeft);
+    console.log(`Niveau ${gameState.currentLevel} terminé en ${timeForThisLevel}s. Temps cumulé: ${gameState.cumulativeTime}s. Pierres restantes: ${gameState.stonesLeft}`);
+
+    if (gameState.stonesLeft <= 0) {
+        gameWon();
+    } else {
+        gameState.currentLevel++;
+        loadLevel(gameState.currentLevel);
+    }
+}
+
+/**
+ * Charge un niveau spécifique, incluant le thème visuel et la logique.
+ * @param {number} levelNumber - Le numéro du niveau à charger.
+ */
 function loadLevel(levelNumber) {
+    const music = document.getElementById('background-music');
+    if (music) {
+        music.pause();
+        music.currentTime = 0;
+    }
+
+    const storyButton = document.getElementById('story-reminder-button');
+    if (storyButton) {
+        storyButton.style.display = 'none';
+    }
+
+    startTimer(gameState.totalTime); // Redémarre le timer pour le nouveau niveau
+
+    const bodyElement = document.body;
+    bodyElement.classList.remove('theme-salle1-ame', 'level2-theme', 'theme-salle3-esprit');
+
     switch (levelNumber) {
         case 1:
+            bodyElement.classList.add('theme-salle1-ame');
+            music.src = './assets/sounds/vormir.mp3';
+            music.volume = 0.5;
+            if (music.src) music.play().catch(e => console.warn("Music play failed for Vormir:", e));
             startVormir();
             break;
         case 2:
-            startTitan(); // Sera activé plus tard
-            console.log("Chargement du niveau 2...");
+            bodyElement.classList.add('level2-theme');
+            music.src = './assets/sounds/titan.mp3';
+            music.volume = 0.3;
+            if (music.src) music.play().catch(e => console.warn("Music play failed for Titan:", e));
+            startTitan();
             break;
         case 3:
-            // startWakanda(); // Sera activé plus tard
-            console.log("Chargement du niveau 3...");
+            bodyElement.classList.add('theme-salle3-esprit');
+            music.src = './assets/sounds/final.mp3';
+            music.volume = 0.4;
+            if (music.src) music.play().catch(e => console.warn("Music play failed for Wakanda (final.mp3):", e));
+            startWakanda();
             break;
         default:
-            gameWon();
+            console.log("Tous les niveaux sont terminés ou niveau inconnu.");
+            if(gameState.stonesLeft > 0) {
+                console.error("Erreur: Tentative de chargement d'un niveau invalide avant la fin du jeu.");
+            }
+            break;
     }
 }
 
-export function levelCompleted() {
-    state.stonesLeft--;
-    ui.updateRiddlesLeft(state.stonesLeft);
-    console.log(`Niveau terminé ! Pierres restantes: ${state.stonesLeft}. Prochain niveau index: ${state.currentLevel + 1}`);
-
-    if (state.stonesLeft <= 0) {
-        gameWon(); 
-    } else {
-        state.currentLevel++;
-        loadLevel(state.currentLevel);
-    }
+/**
+ * Formate le temps en secondes en une chaîne "Xm Ys".
+ * @param {number} timeInSeconds - Le temps total en secondes.
+ * @returns {string} Le temps formaté.
+ */
+function formatTime(timeInSeconds) {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
 }
 
+/**
+ * Gère la séquence de victoire du jeu avec plusieurs écrans et dialogues.
+ */
 function gameWon() {
-    stopTimer();
-    ui.clearGameArea();
-    ui.loadSceneBackground(''); 
-    const music = document.getElementById('background-music');
-    music.pause();
-    music.src = ''; 
+    const finalPlayTime = gameState.cumulativeTime; // C'est déjà le cumul des temps de niveau
+    saveScore(gameState.currentPlayerName, finalPlayTime);
 
-    ui.showDialogue({ name: "Thanos", image: './assets/images/sprites/thanos.png' }, // [cite: 2]
-        "Enfin ! L'équilibre sera restauré. L'univers ne saura jamais ce qu'il vous doit."); // [cite: 54]
-    console.log("VICTOIRE - Toutes les pierres réunies !");
+    ui.clearGameArea();
+    ui.setRoomTitle("DESTINÉE ACCOMPLIE");
+
+    const music = document.getElementById('background-music');
+    if (music) {
+        // music.pause(); // La musique continue de jouer
+    }
+    document.body.classList.remove('theme-salle1-ame', 'level2-theme', 'theme-salle3-esprit');
+
+    const thanosVictory = { name: "Thanos", image: './assets/images/sprites/thanos.png' };
+    const systemMessage = { name: "Système", image: "" };
+
+    ui.loadSceneBackground('./assets/images/final_1.jpg');
+    ui.showDialogue(thanosVictory, "L'univers requiert une correction. Ma volonté est plus forte que la leur.");
+
+    setTimeout(() => {
+        ui.loadSceneBackground('./assets/images/final_2.jpg');
+        ui.showDialogue(thanosVictory, "L'équilibre doit être restauré. Une nouvelle ère commence.");
+
+        setTimeout(() => {
+            ui.loadSceneBackground('./assets/images/final_3.jpg');
+            ui.showDialogue(thanosVictory, "Je... suis... inéluctable.");
+
+            setTimeout(() => {
+                // Construction du message final avec les temps détaillés
+                let finalMessageText = `FÉLICITATIONS, ${gameState.currentPlayerName} ! Vous avez accompli votre destinée !\n\n`;
+                gameState.levelTimes.forEach((time, index) => {
+                    finalMessageText += `Temps Salle ${index + 1}: ${formatTime(time)}\n`;
+                });
+                finalMessageText += `\nTemps total : ${formatTime(finalPlayTime)}.`;
+
+                ui.showDialogue(
+                    systemMessage,
+                    finalMessageText
+                );
+            }, 5000);
+        }, 6000);
+    }, 6000);
+
+    console.log("Jeu gagné ! Séquence de victoire lancée.");
+    console.log("Temps par niveau:", gameState.levelTimes);
+    console.log("Temps total cumulé:", finalPlayTime);
 }
 
-export function gameOverTimeOut() {
+document.addEventListener('gameOverTimer', () => {
+    console.log("Événement gameOverTimer (ou défaite) reçu dans game.js");
     stopTimer();
     ui.clearGameArea();
-    ui.loadSceneBackground('');
     const music = document.getElementById('background-music');
-    music.pause();
-    music.src = '';
+    if (music) music.pause();
+    document.body.classList.remove('theme-salle1-ame', 'level2-theme', 'theme-salle3-esprit');
 
-    ui.showDialogue({ name: "Strange", image: './assets/images/sprites/strange.png' }, // [cite: 2]
-        "Le temps nous a manqué... Ce n'était pas la bonne réalité. L'univers est perdu."); // [cite: 54]
-    console.log("GAME OVER - Temps écoulé");
-}
+    ui.setRoomTitle("DÉFAITE...");
 
-
-export { startGame };
+    if (document.getElementById('dialogue-window').classList.contains('hidden')) {
+         ui.showDialogue(
+            { name: "Strange", image: './assets/images/sprites/strange.png' },
+            `Le destin n'a pas tourné en votre faveur cette fois, ${gameState.currentPlayerName}. La quête est un échec.`
+        );
+    }
+    console.log("Jeu perdu !");
+});

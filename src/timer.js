@@ -1,11 +1,18 @@
-// src/timer.js
 import { updateTimerDisplay } from './ui.js';
 
 let timerInterval;
+let timeRemainingOnStop = 0;
+let initialDuration = 0;
 
-function startTimer(durationInSeconds) {
+export function startTimer(durationInSeconds) {
+    initialDuration = durationInSeconds;
     let timer = durationInSeconds;
+    timeRemainingOnStop = durationInSeconds;
     let minutes, seconds;
+
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
 
     timerInterval = setInterval(() => {
         minutes = parseInt(timer / 60, 10);
@@ -15,19 +22,22 @@ function startTimer(durationInSeconds) {
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
         updateTimerDisplay(`${minutes}:${seconds}`);
+        timeRemainingOnStop = timer;
 
         if (--timer < 0) {
             stopTimer();
-            // Ici, on déclenchera un événement 'gameOver'
             console.log("TEMPS ÉCOULÉ !");
-            alert("Temps écoulé ! Game Over.");
-            window.location.reload(); // Recommencer
+            const gameOverEvent = new CustomEvent('gameOverTimer');
+            document.dispatchEvent(gameOverEvent);
         }
     }, 1000);
 }
 
-function stopTimer() {
+export function stopTimer() {
     clearInterval(timerInterval);
+    console.log(`Timer arrêté. Temps restant : ${timeRemainingOnStop}`);
 }
 
-export { startTimer, stopTimer };
+export function getPlayTimeInSeconds() {
+    return initialDuration - timeRemainingOnStop;
+}

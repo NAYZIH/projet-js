@@ -1,98 +1,109 @@
-// src/levels/level1.js
-
 import * as ui from '../ui.js';
 import { levelCompleted } from '../game.js';
 import { playSound } from '../utils/sound.js';
 
-// --- Constantes du niveau ---
 const gamora = { name: "Gamora", image: "./assets/images/sprites/gamora.png" };
 const thanos = { name: "Thanos", image: "./assets/images/sprites/thanos.png" };
+const narrator = { name: "Rappel", image: "" };
 
-const correctOrder = ['souvenir_dague', 'souvenir_poupee'];
+const correctOrder = ['souvenir_dague', 'souvenir_poupee', 'gamora-sprite'];
 let sacrificedItems = [];
+let isRiddleSolved = false;
 
-
-// --- Fonctions du niveau ---
-
-/**
- * Fonction principale qui initialise le niveau 1.
- */
 export function startVormir() {
     console.log("Lancement du niveau 1 : Vormir");
-    
-    // Réinitialise l'interface
     ui.clearGameArea();
     sacrificedItems = [];
+    isRiddleSolved = false;
 
-    // Met à jour les informations de la scène
     ui.setRoomTitle("Vormir : La Pierre de l'Âme");
     ui.loadSceneBackground('./assets/images/vormir_2d.jpg');
-    ui.showDialogue(thanos, "Le plus dur des choix requiert la plus grande des volontés.");
+    ui.showDialogue(thanos, "Un sacrifice... pour un sacrifice.");
 
-    // --- GESTION DE LA MUSIQUE ---
     const music = document.getElementById('background-music');
-    music.src = './assets/sounds/vormir.mp3'; 
-    music.volume = 0.3; 
+    music.src = './assets/sounds/vormir.mp3';
+    music.volume = 0.5;
     music.play();
-    // --- FIN DE LA GESTION MUSIQUE ---
 
-    // Crée les éléments de l'énigme et active les interactions
     createRiddleElements();
-    addDragAndDropListeners();
+    addEventListeners();
+
+    const storyButton = document.getElementById('story-reminder-button');
+    if (storyButton) {
+        storyButton.style.display = 'inline-block';
+        storyButton.onclick = () => {
+            const dialogueWindow = document.getElementById('dialogue-window');
+            const isDialogueVisible = !dialogueWindow.classList.contains('hidden');
+
+            const storyTextLvl1 = "Sur la planète désolée de Vormir, Thanos, accompagné de Gamora, cherche à obtenir la Pierre de l'Âme. Il apprend le terrible prix à payer : \"Une âme pour une âme\". Pour s'emparer de la Pierre, Thanos doit comprendre et accomplir le sacrifice ultime : il doit sacrifier ce qu'il aime le plus...";
+
+            if (isDialogueVisible && dialogueWindow.querySelector('#dialogue-text').textContent === storyTextLvl1) {
+                ui.hideDialogue();
+            } else {
+                ui.showDialogue(narrator, storyTextLvl1);
+            }
+        };
+    }
 }
 
-/**
- * Crée les éléments HTML pour l'énigme (objets et zone de drop).
- */
 function createRiddleElements() {
     const gameArea = document.getElementById('game-area');
+
+    const gamoraSprite = document.createElement('img');
+    gamoraSprite.id = 'gamora-sprite';
+    gamoraSprite.src = './assets/images/sprites/gamora.png';
+    gamoraSprite.className = 'interactive-object';
+    gamoraSprite.draggable = true;
+    gameArea.appendChild(gamoraSprite);
+
     const sacrificeZone = document.createElement('div');
     sacrificeZone.id = 'sacrifice-zone';
     gameArea.appendChild(sacrificeZone);
+
     const memory1 = document.createElement('img');
     memory1.src = './assets/images/objects/poupee.png';
     memory1.id = 'souvenir_poupee';
     memory1.className = 'memory-object interactive-object';
     memory1.draggable = true;
-    memory1.style.top = '200px';
-    memory1.style.left = '150px';
+    // Les styles de position sont maintenant dans le CSS
     gameArea.appendChild(memory1);
+
     const memory2 = document.createElement('img');
     memory2.src = './assets/images/objects/dague.png';
     memory2.id = 'souvenir_dague';
     memory2.className = 'memory-object interactive-object';
     memory2.draggable = true;
-    memory2.style.top = '350px';
-    memory2.style.left = '700px';
+    // Les styles de position sont maintenant dans le CSS
     gameArea.appendChild(memory2);
 }
 
-/**
- * Ajoute tous les écouteurs d'événements nécessaires pour le Drag & Drop.
- */
-function addDragAndDropListeners() {
+function addEventListeners() {
     const memories = document.querySelectorAll('.memory-object');
     const sacrificeZone = document.getElementById('sacrifice-zone');
-    memories.forEach(memory => {
-        memory.addEventListener('dragstart', (event) => {
-            // On joue le son "pickup"
-            playSound('./assets/sounds/pickup.mp3', 0.1); // CHANGEMENT : Volume baissé à 20%
+    const gamoraSprite = document.getElementById('gamora-sprite');
 
-            event.dataTransfer.setData('text/plain', event.target.id);
-            setTimeout(() => { event.target.classList.add('hidden'); }, 0);
-        });
-        memory.addEventListener('dragend', (event) => {
-            event.target.classList.remove('hidden');
-        });
+    memories.forEach(memory => {
+        addDragEvents(memory);
     });
+
+    addDragEvents(gamoraSprite);
+
+    gamoraSprite.addEventListener('click', () => {
+        if (!isRiddleSolved) {
+            ui.showDialogue(gamora, "Toute ma vie, j'ai rêvé d'un jour, d'un moment, où tu aurais ce que tu mérites. Et j'ai toujours été tellement déçue. Mais maintenant, tu tues et tu tortures et tu appelles ça de la pitié. L'univers t'a jugé. Tu lui as demandé un prix et il t'a dit non. Tu as échoué. Et tu veux savoir pourquoi ? Parce que tu n'aimes rien. Personne.");
+        }
+    });
+
     sacrificeZone.addEventListener('dragover', (event) => {
-        event.preventDefault(); 
+        if (isRiddleSolved) return;
+        event.preventDefault();
         sacrificeZone.classList.add('drag-over');
     });
     sacrificeZone.addEventListener('dragleave', () => {
         sacrificeZone.classList.remove('drag-over');
     });
     sacrificeZone.addEventListener('drop', (event) => {
+        if (isRiddleSolved) return;
         event.preventDefault();
         sacrificeZone.classList.remove('drag-over');
         const droppedItemId = event.dataTransfer.getData('text/plain');
@@ -103,26 +114,29 @@ function addDragAndDropListeners() {
     });
 }
 
-/**
- * Gère la logique lorsqu'un objet est déposé dans la zone.
- */
-function handleSacrifice(item) {
-    // On joue le son "drop"
-    playSound('./assets/sounds/drop.mp3', 0.1); // CHANGEMENT : Volume baissé à 40%
+function addDragEvents(element) {
+    element.addEventListener('dragstart', (event) => {
+        if (isRiddleSolved) return;
+        playSound('./assets/sounds/pickup.wav', 0.1);
+        event.dataTransfer.setData('text/plain', event.target.id);
+        setTimeout(() => { element.classList.add('hidden'); }, 0);
+    });
+    element.addEventListener('dragend', (event) => {
+        element.classList.remove('hidden');
+    });
+}
 
-    item.remove();
+function handleSacrifice(item) {
+    playSound('./assets/sounds/drop.wav', 0.1);
+    item.style.display = 'none';
     sacrificedItems.push(item.id);
     ui.showDialogue(thanos, `Un sacrifice a été fait...`);
     checkVictory();
 }
 
-/**
- * Vérifie si la condition de victoire (bon ordre des sacrifices) est remplie.
- */
 function checkVictory() {
     if (sacrificedItems.length === correctOrder.length) {
         document.getElementById('background-music').pause();
-
         let isOrderCorrect = true;
         for (let i = 0; i < correctOrder.length; i++) {
             if (sacrificedItems[i] !== correctOrder[i]) {
@@ -132,10 +146,19 @@ function checkVictory() {
         }
 
         if (isOrderCorrect) {
-            ui.showDialogue(thanos, "Je suis navré, mon enfant. La pierre est à moi.");
-            setTimeout(levelCompleted, 3000);
+            isRiddleSolved = true;
+            playSound('./assets/sounds/victory.mp3');
+            setTimeout(() => {
+                const music = document.getElementById('background-music');
+                if (music) {
+                    music.play();
+                }
+            }, 2500);
+            ui.loadSceneBackground('./assets/images/gamora_dead.jpeg');
+            ui.showDialogue(thanos, "Je suis navré, mon enfant. (Thanos accomplit le sacrifice et obtient la pierre)");
+            setTimeout(levelCompleted, 9000);
         } else {
-            ui.showDialogue(gamora, "Ce n'est pas le bon ordre ! Le sacrifice n'est pas accepté !");
+            ui.showDialogue(gamora, "Ce n'est pas l'ordre correct du sacrifice !");
             setTimeout(startVormir, 3000);
         }
     }
