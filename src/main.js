@@ -1,29 +1,49 @@
-// src/main.js - Version Finale
-
 import { startGame } from './game.js';
 
-// Attend que l'ensemble du contenu de la page (le DOM) soit chargé avant d'exécuter le script.
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM prêt. En attente du lancement par l'utilisateur.");
+    console.log("DOM prêt. Menu principal affiché.");
 
     const startButton = document.getElementById('start-button');
     const startScreen = document.getElementById('start-screen');
+    const infoBanner = document.getElementById('info-banner');
+    const titleBanner = document.getElementById('title-banner');
+    const homeMusic = document.getElementById('home-music');
 
-    if (startButton && startScreen) {
-        // Ajoute un écouteur d'événement sur le clic du bouton "Lancer la Quête".
+    if (homeMusic) {
+        homeMusic.volume = 0.03; 
+        const playPromise = homeMusic.play();
+
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.warn("La lecture automatique de la musique d'accueil a été bloquée par le navigateur.", error);
+                const playOnClick = () => {
+                    homeMusic.play();
+                    document.body.removeEventListener('click', playOnClick);
+                };
+                document.body.addEventListener('click', playOnClick);
+            });
+        }
+    }
+
+    if (startButton && startScreen && infoBanner && titleBanner) {
         startButton.addEventListener('click', () => {
-            // Fait disparaître l'écran de démarrage.
-            startScreen.style.display = 'none';
-            
-            // Demande le pseudo au joueur via une boîte de dialogue.
-            let playerName = prompt("Entrez votre pseudo :", "Thanos Jr.");
+            if (homeMusic) {
+                homeMusic.pause();
+                homeMusic.currentTime = 0; 
+            }
 
-            // Si le joueur ne saisit rien ou annule, on lui donne un nom par défaut.
+            startScreen.style.display = 'none';
+
+            infoBanner.classList.remove('hidden');
+            infoBanner.style.display = 'flex'; 
+            titleBanner.classList.remove('hidden');
+            titleBanner.style.display = 'flex'; 
+
+            let playerName = prompt("Entrez votre pseudo :", "Thanos");
             if (!playerName || playerName.trim() === "") {
-                playerName = "Thanos Jr."; 
+                playerName = "Thanos";
             }
             
-            // Appelle la fonction principale du jeu en lui passant le nom du joueur.
             startGame(playerName); 
         });
     }

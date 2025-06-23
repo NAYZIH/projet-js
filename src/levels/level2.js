@@ -2,18 +2,15 @@ import * as ui from '../ui.js';
 import { levelCompleted } from '../game.js';
 import { playSound } from '../utils/sound.js';
 
-// --- Character Definitions ---
 const thanos = { name: 'Thanos', image: './assets/images/sprites/thanos.png' };
 const strange = { name: 'Doctor Strange', image: './assets/images/sprites/strange.png' };
 const narrator = { name: "Rappel", image: "" };
 
-// --- Level Constants ---
 const LEVEL_ID = "Titan - La Pierre du Temps";
 const BACKGROUND_IMAGE = './assets/images/titan_2d.jpg';
 const MUSIC_SRC = './assets/sounds/titan.mp3';
 const storyTextLvl2 = "Sur Titan, face à Thanos, Docteur Strange utilise la Pierre du Temps pour explorer 14 000 605 futurs. Il découvre qu'une seule voie mène à la victoire contre le Titan. Cette unique vision dictera son choix crucial...";
 
-// --- Sound Constants ---
 const NUMBER_APPEAR_SOUND = './assets/sounds/number_appear.mp3';
 const PORTAL_HOVER_SOUND = './assets/sounds/portal.wav';
 const WRONG_CODE_SOUND = './assets/sounds/wrong-code.wav';
@@ -21,17 +18,15 @@ const AGAMOTTO_CLICK_SOUND = './assets/sounds/agamotto.wav';
 const VICTORY_SOUND = './assets/sounds/victory.mp3';
 
 const CODE_LENGTH = 4;
-const NUMBER_APPEAR_INTERVAL = 10000; // 10 seconds
-const NUMBER_DISPLAY_DURATION = 2000; // 2 seconds
+const NUMBER_APPEAR_INTERVAL = 10000; 
+const NUMBER_DISPLAY_DURATION = 2000; 
 
-// --- Level State ---
 let correctCode = [];
 let numberAppearanceIntervalId = null;
 let currentCodeDigitIndex = 0;
 let interactiveElementsForNumbers = [];
 let gameAreaRef;
 
-// --- Main Level Function ---
 export function startTitan() {
     console.log('Lancement du niveau 2 - Titan');
 
@@ -172,7 +167,7 @@ function displayDigitOnElement(digit) {
     numberDisplay.style.top = `${hostElement.offsetTop + (hostElement.offsetHeight / 2) - 25}px`;
     numberDisplay.style.left = `${hostElement.offsetLeft + (hostElement.offsetWidth / 2) - 15}px`;
     gameAreaRef.appendChild(numberDisplay);
-    playSound(NUMBER_APPEAR_SOUND, 0.6);
+    playSound(NUMBER_APPEAR_SOUND, 0.1);
     setTimeout(() => {
         if (numberDisplay.parentNode === gameAreaRef) {
             gameAreaRef.removeChild(numberDisplay);
@@ -210,7 +205,6 @@ function handleVictory() {
     ui.loadSceneBackground('./assets/images/thanos-bg.jpg');
     ui.showDialogue(thanos, "Le temps lui-même se courbe devant la destinée. Docteur Strange, en me cédant cette Pierre, tu as enfin saisi la logique implacable de mon dessein. L'équilibre est plus proche, et ta sagesse, aussi forcée soit-elle, y aura contribué...");
 
-    // MODIFICATION : Le délai est passé de 4500ms à 9500ms
     setTimeout(() => {
         levelCompleted();
         document.body.classList.remove('level2-theme');

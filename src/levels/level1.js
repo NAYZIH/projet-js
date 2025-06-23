@@ -65,7 +65,6 @@ function createRiddleElements() {
     memory1.id = 'souvenir_poupee';
     memory1.className = 'memory-object interactive-object';
     memory1.draggable = true;
-    // Les styles de position sont maintenant dans le CSS
     gameArea.appendChild(memory1);
 
     const memory2 = document.createElement('img');
@@ -73,7 +72,6 @@ function createRiddleElements() {
     memory2.id = 'souvenir_dague';
     memory2.className = 'memory-object interactive-object';
     memory2.draggable = true;
-    // Les styles de position sont maintenant dans le CSS
     gameArea.appendChild(memory2);
 }
 
